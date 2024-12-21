@@ -1,11 +1,14 @@
-import { authConfig } from "@/lib/auth";
+import { authConfig, loginServerSideRestricted } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 
 export default async function Home() {
 
   const session = await getServerSession(authConfig)
 
+  await loginServerSideRestricted()
 
+  
+  
   return (
     <div className="flex flex-col justify-center items-center">
       <h1>
