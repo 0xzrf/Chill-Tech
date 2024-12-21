@@ -17,6 +17,7 @@ datasource db {
 model Parent {
   userId String @id @default(uuid())
   email String @unique
+  username String @unique
   children Children[]
   onboarding Boolean @default(true)
 }

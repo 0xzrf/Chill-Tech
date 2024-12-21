@@ -7,7 +7,9 @@ export default async function Home() {
 
   await loginServerSideRestricted()
 
-  
+  if (session) {
+    
+  }
   
   return (
     <div className="flex flex-col justify-center items-center">

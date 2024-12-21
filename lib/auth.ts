@@ -1,5 +1,8 @@
 import { NextAuthOptions } from "next-auth"
 import { getServerSession } from "next-auth"
+import { PrismaClient } from "@prisma/client/edge";
+
+export const prisma = new PrismaClient()
 
 import GoogleProvider from "next-auth/providers/google"
 import { redirect } from "next/navigation";
