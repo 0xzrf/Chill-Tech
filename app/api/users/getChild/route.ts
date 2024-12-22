@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
                 parent: {
                     email: session.user.email
                 }
-            }
+            },
         });
 
         if (!child) {

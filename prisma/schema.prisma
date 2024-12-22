@@ -42,6 +42,8 @@ model Activities {
   description String
   when DateTime
   points Int
-  childrenId String @unique
+  completed Boolean @default(false)
+  completedAt DateTime?
+  childrenId String
   activities Children @relation(fields: [childrenId], references: [childId])
 }
