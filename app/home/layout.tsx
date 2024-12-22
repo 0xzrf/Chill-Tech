@@ -1,20 +1,13 @@
-import {Providers} from "@/components/Provider"
+import Provider from "@/components/Provider"
 
-
-export default function RootLayout({
+export default function HomeLayout({
     children,
-}: Readonly<{
-    children: React.ReactNode;
-}>) {
+}: {
+    children: React.ReactNode
+}) {
     return (
-        <html lang="en">
-            <body
-                className={`antialiased`}
-            >
-                <Providers>
-                    {children}
-                </Providers>
-            </body>
-        </html>
-    );
+        <Provider>
+            {children}
+        </Provider>
+    )
 }
