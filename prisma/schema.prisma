@@ -28,7 +28,11 @@ model Children {
   age Int
   parent Parent @relation(fields: [parentId], references: [userId])
   parentId String
-  totalPoints Int
+  totalPoints Int @default(0)
+  currentStreak Int @default(0)
+  longestStreak Int @default(0)
+  lastActivityDate DateTime? 
+  activitiesCompleted Int @default(0)
   activities Activities[]
 }
 

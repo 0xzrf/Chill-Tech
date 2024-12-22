@@ -13,12 +13,15 @@ export const POST = async (req: NextRequest) => {
         });
     }
 
-    const { children } = await req.json();
+    const { childId } = await req.json();
 
     try {
         const user = await prisma.parent.findUnique({
             where: {
                 email: session.user.email
+            },
+            include: {
+                children: true
             }
         });
 
@@ -29,36 +32,22 @@ export const POST = async (req: NextRequest) => {
             });
         }
 
-        // Create children
-        for (const child of children) {
-            await prisma.children.create({
-                data: {
-                    name: child.name,
-                    age: child.age,
-                    totalPoints: 0,
-                    parentId: user.userId
-                }
-            });
-        }
-
-        // Update onboarding status
-        await prisma.parent.update({
+        // Remove the child
+        await prisma.children.delete({
             where: {
-                email: session.user.email
-            },
-            data: {
-                onboarding: false
+                childId: childId
             }
         });
 
         return NextResponse.json({
+            msg: "Child removed successfully",
             success: true
         });
     } catch (error) {
-        console.error('Error saving onboarding:', error);
+        console.error("Error removing child:", error);
         return NextResponse.json({
-            msg: "Error saving onboarding data",
+            msg: "Error removing child",
             success: false
         });
     }
-}
+};
