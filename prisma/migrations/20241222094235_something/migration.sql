@@ -2,6 +2,7 @@
 CREATE TABLE "Parent" (
     "userId" TEXT NOT NULL,
     "email" TEXT NOT NULL,
+    "username" TEXT NOT NULL,
     "onboarding" BOOLEAN NOT NULL DEFAULT true,
 
     CONSTRAINT "Parent_pkey" PRIMARY KEY ("userId")
@@ -32,6 +33,9 @@ CREATE TABLE "Activities" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Parent_email_key" ON "Parent"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Parent_username_key" ON "Parent"("username");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Activities_childrenId_key" ON "Activities"("childrenId");

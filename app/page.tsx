@@ -9,10 +9,15 @@ export default async function Home() {
   await loginServerSideRestricted()
 
   if (session) {
-    await axios.post("/api/user/createUser", {
+    const response = await axios.post("http://localhost:3000/api/users/createUser", {
       email: session?.user?.email,
       username: session?.user?.name
     })
+
+    if (!response.data.success) {
+      alert(response.data.msg)
+      return
+    }
 
     redirect("/home")    
   }
