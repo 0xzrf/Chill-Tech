@@ -20,6 +20,7 @@ export const POST = async (req: NextRequest) => {
     })
 
     return NextResponse.json({
-        user
+        user,
+        success: true
     })
 }
