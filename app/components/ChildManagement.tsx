@@ -20,6 +20,7 @@ export default function ChildManagement({ onboarding, children = [] }: ChildMana
     const [childInputs, setChildInputs] = useState<Child[]>([{ name: '', age: 0 }]);
     const [editingChild, setEditingChild] = useState<Child | null>(null);
     const [isEditing, setIsEditing] = useState(false);
+    const [isAddingNew, setIsAddingNew] = useState(false);
     const router = useRouter();
 
     const handleAddChild = () => {
@@ -40,6 +41,7 @@ export default function ChildManagement({ onboarding, children = [] }: ChildMana
             age: child.age
         });
         setIsEditing(true);
+        setIsAddingNew(false);
     };
 
     const handleUpdateChild = async () => {
@@ -93,6 +95,7 @@ export default function ChildManagement({ onboarding, children = [] }: ChildMana
                 children: childInputs
             });
             if (response.data.success) {
+                setIsAddingNew(false);
                 window.location.reload();
             } else {
                 alert('Failed to save children information');
@@ -107,7 +110,7 @@ export default function ChildManagement({ onboarding, children = [] }: ChildMana
         router.push(`/info/${childId}`);
     };
 
-    if (!onboarding) {
+    if (!onboarding && !isAddingNew) {
         return (
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <h2 className="text-3xl font-bold mb-8">Welcome to Chill Tech!</h2>
@@ -115,13 +118,17 @@ export default function ChildManagement({ onboarding, children = [] }: ChildMana
                     <div className="flex items-center justify-between">
                         <h3 className="text-2xl font-semibold">Your Children</h3>
                         <button
-                            onClick={() => setIsEditing(false)}
+                            onClick={() => {
+                                setIsAddingNew(true);
+                                setIsEditing(false);
+                                setEditingChild(null);
+                                setChildInputs([{ name: '', age: 0 }]);
+                            }}
                             className="btn btn-primary"
                         >
                             + Add Child
                         </button>
                     </div>
-                    
                     {children.length > 0 ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             {children.map((child, i) => (
@@ -215,7 +222,7 @@ export default function ChildManagement({ onboarding, children = [] }: ChildMana
                         <div className="text-center py-12 bg-[var(--card)] rounded-xl">
                             <p className="text-lg text-[var(--secondary)]">No children added yet.</p>
                             <button
-                                onClick={() => setIsEditing(false)}
+                                onClick={() => setIsAddingNew(true)}
                                 className="btn btn-primary mt-4"
                             >
                                 Add Your First Child
@@ -227,72 +234,86 @@ export default function ChildManagement({ onboarding, children = [] }: ChildMana
         );
     }
 
-    return (
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <h2 className="text-3xl font-bold mb-8">Add Your Children</h2>
-            <form onSubmit={handleSubmit} className="space-y-6">
-                {childInputs.map((child, index) => (
-                    <div key={index} className="card p-6 space-y-4">
-                        <div className="flex items-center justify-between">
-                            <h3 className="text-lg font-medium">Child {index + 1}</h3>
-                            {index > 0 && (
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        const newInputs = childInputs.filter((_, i) => i !== index);
-                                        setChildInputs(newInputs);
-                                    }}
-                                    className="text-[var(--error)] hover:opacity-80"
-                                >
-                                    Remove
-                                </button>
-                            )}
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium mb-1">
-                                Name
-                            </label>
-                            <input
-                                type="text"
-                                required
-                                value={child.name}
-                                onChange={(e) => handleInputChange(index, 'name', e.target.value)}
-                                className="input"
-                                placeholder="Enter child's name"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium mb-1">
-                                Age
-                            </label>
-                            <input
-                                type="number"
-                                required
-                                min="0"
-                                value={child.age}
-                                onChange={(e) => handleInputChange(index, 'age', parseInt(e.target.value))}
-                                className="input"
-                                placeholder="Enter child's age"
-                            />
-                        </div>
-                    </div>
-                ))}
-                <div className="flex items-center space-x-4 pt-4">
-                    <button
-                        type="button"
-                        onClick={handleAddChild}
-                        className="btn btn-secondary"
-                    >
-                        + Add Another Child
-                    </button>
-                    <button
-                        type="submit"
-                        className="btn btn-primary"
-                    >
-                        Save All Changes
-                    </button>
+    if (isAddingNew || onboarding) {
+        return (
+            <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <div className="flex items-center justify-between mb-8">
+                    <h2 className="text-3xl font-bold">Add Your Children</h2>
+                    {!onboarding && (
+                        <button
+                            onClick={() => setIsAddingNew(false)}
+                            className="btn btn-secondary"
+                        >
+                            Cancel
+                        </button>
+                    )}
                 </div>
-            </form>
-        </div>
-    );
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    {childInputs.map((child, index) => (
+                        <div key={index} className="card p-6 space-y-4">
+                            <div className="flex items-center justify-between">
+                                <h3 className="text-lg font-medium">Child {index + 1}</h3>
+                                {index > 0 && (
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            const newInputs = childInputs.filter((_, i) => i !== index);
+                                            setChildInputs(newInputs);
+                                        }}
+                                        className="text-[var(--error)] hover:opacity-80"
+                                    >
+                                        Remove
+                                    </button>
+                                )}
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium mb-1">
+                                    Name
+                                </label>
+                                <input
+                                    type="text"
+                                    required
+                                    value={child.name}
+                                    onChange={(e) => handleInputChange(index, 'name', e.target.value)}
+                                    className="input"
+                                    placeholder="Enter child's name"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium mb-1">
+                                    Age
+                                </label>
+                                <input
+                                    type="number"
+                                    required
+                                    min="0"
+                                    value={child.age}
+                                    onChange={(e) => handleInputChange(index, 'age', parseInt(e.target.value))}
+                                    className="input"
+                                    placeholder="Enter child's age"
+                                />
+                            </div>
+                        </div>
+                    ))}
+                    <div className="flex items-center space-x-4 pt-4">
+                        <button
+                            type="button"
+                            onClick={handleAddChild}
+                            className="btn btn-secondary"
+                        >
+                            + Add Another Child
+                        </button>
+                        <button
+                            type="submit"
+                            className="btn btn-primary"
+                        >
+                            Save All Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        );
+    }
+
+    return null;
 }

@@ -55,83 +55,136 @@ export default async function ChildInfo({
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-[var(--background)]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header Section */}
-        <div className="bg-white rounded-lg p-6 mb-6">
-          <h1 className="text-3xl font-bold text-gray-900">{child.name}'s Dashboard</h1>
-          <div className="mt-2 text-gray-600">
-            <p>Age: {child.age}</p>
-            <p>Total Points: {child.totalPoints}</p>
+        <div className="card p-8 mb-8 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-[var(--primary)] to-[var(--accent)] opacity-10 rounded-full transform translate-x-1/2 -translate-y-1/2"></div>
+          <div className="relative">
+            <h1 className="text-4xl font-bold">{child.name}'s Dashboard</h1>
+            <p className="text-[var(--secondary)] mt-2">
+              Age: {child.age} years old
+            </p>
           </div>
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-          <div className="bg-blue-500 text-white rounded-lg p-6">
-            <h3 className="text-lg font-semibold">Total Points</h3>
-            <p className="text-3xl font-bold mt-2">{child.totalPoints} pts</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="card p-6 bg-gradient-to-br from-[var(--primary)] to-[var(--primary-hover)]">
+            <div className="flex items-center space-x-4">
+              <div className="p-3 bg-white/10 rounded-lg">
+                🏆
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-white/80">Total Points</h3>
+                <p className="text-2xl font-bold text-white mt-1">{child.totalPoints}</p>
+              </div>
+            </div>
           </div>
-          <div className="bg-green-500 text-white rounded-lg p-6">
-            <h3 className="text-lg font-semibold">Activities Completed</h3>
-            <p className="text-3xl font-bold mt-2">{child.activitiesCompleted}</p>
+
+          <div className="card p-6 bg-gradient-to-br from-[var(--success)] to-emerald-600">
+            <div className="flex items-center space-x-4">
+              <div className="p-3 bg-white/10 rounded-lg">
+                ✅
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-white/80">Activities Done</h3>
+                <p className="text-2xl font-bold text-white mt-1">{child.activitiesCompleted}</p>
+              </div>
+            </div>
           </div>
-          <div className="bg-purple-500 text-white rounded-lg p-6">
-            <h3 className="text-lg font-semibold">Current Streak</h3>
-            <p className="text-3xl font-bold mt-2">{child.currentStreak} days</p>
-            <p className="text-sm mt-1">Longest: {child.longestStreak} days</p>
+
+          <div className="card p-6 bg-gradient-to-br from-[var(--accent)] to-amber-600">
+            <div className="flex items-center space-x-4">
+              <div className="p-3 bg-white/10 rounded-lg">
+                🔥
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-white/80">Current Streak</h3>
+                <p className="text-2xl font-bold text-white mt-1">{child.currentStreak} days</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="card p-6 bg-gradient-to-br from-[var(--secondary)] to-slate-600">
+            <div className="flex items-center space-x-4">
+              <div className="p-3 bg-white/10 rounded-lg">
+                ⭐
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-white/80">Best Streak</h3>
+                <p className="text-2xl font-bold text-white mt-1">{child.longestStreak} days</p>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Activity Management Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <div>
-            <h2 className="text-xl font-semibold mb-4">Add New Activity</h2>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <div className="card p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold">Add Activity</h2>
+              <span className="px-3 py-1 bg-[var(--primary)] bg-opacity-10 text-[var(--primary)] rounded-full text-sm font-medium">
+                New
+              </span>
+            </div>
             <ActivityForm childId={params.childId} />
           </div>
-          <div>
-            <h2 className="text-xl font-semibold mb-4">Pending Activities</h2>
+
+          <div className="card p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold">Pending Tasks</h2>
+              <span className="px-3 py-1 bg-[var(--accent)] bg-opacity-10 text-[var(--accent)] rounded-full text-sm font-medium">
+                {child.activities.length} tasks
+              </span>
+            </div>
             <ActivityList activities={child.activities} childId={params.childId} />
           </div>
         </div>
 
         {/* Recent Activities Section */}
-        <div className="bg-white rounded-lg p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Recent Activities</h2>
+        <div className="card p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold">Recent Activities</h2>
+            <span className="px-3 py-1 bg-[var(--secondary)] bg-opacity-10 text-white rounded-full text-sm font-medium">
+              Last 5 activities
+            </span>
+          </div>
           <div className="space-y-4">
             {recentActivities.map((activity) => (
               <div 
                 key={activity.activityId} 
-                className={`border-b pb-4 last:border-b-0 ${
-                  activity.completed ? 'bg-green-50' : 'bg-red-50'
-                } rounded-lg p-4`}
+                className="card p-4 hover:scale-[1.02] transform transition-transform duration-200"
               >
-                <div className="flex justify-between items-center">
-                  <div>
-                    <h3 className="font-semibold text-gray-900">{activity.name}</h3>
-                    <p className="text-gray-600 text-sm">{activity.description}</p>
-                    <p className="text-gray-500 text-sm">
-                      Due: {new Date(activity.when).toLocaleString()}
-                    </p>
-                    <p className="text-sm mt-1">
-                      {activity.completedAt && 
-                        `Marked on ${new Date(activity.completedAt).toLocaleString()} as ${
-                          activity.completed ? 'Completed' : 'Not Completed'
-                        }`
-                      }
-                    </p>
+                <div className="flex justify-between items-start">
+                  <div className="space-y-2">
+                    <h3 className="font-semibold text-lg">{activity.name}</h3>
+                    <p className="text-[var(--secondary)]">{activity.description}</p>
+                    <div className="flex items-center space-x-4 text-sm text-[var(--secondary)]">
+                      <span className="flex items-center">
+                        📅 Due: {new Date(activity.when).toLocaleDateString()}
+                      </span>
+                      <span className="flex items-center">
+                        🕒 {new Date(activity.when).toLocaleTimeString()}
+                      </span>
+                    </div>
+                    {activity.completedAt && (
+                      <p className="text-sm text-[var(--secondary)]">
+                        ✍️ Marked {activity.completed ? 'complete' : 'incomplete'} on {new Date(activity.completedAt).toLocaleDateString()}
+                      </p>
+                    )}
                   </div>
-                  <div className="flex flex-col items-end">
-                    <span className={`px-4 py-2 rounded-md text-center ${
+                  <div className="flex flex-col items-end space-y-2">
+                    <span className={`px-4 py-2 rounded-full text-sm font-medium ${
                       activity.completed 
-                        ? 'bg-green-100 text-green-800' 
-                        : 'bg-red-100 text-red-800'
+                        ? 'bg-[var(--success)] bg-opacity-10 text-white' 
+                        : 'bg-[var(--error)] bg-opacity-10 text-white'
                     }`}>
-                      {activity.completed ? 'Completed ✓' : 'Not Completed ✗'}
+                      {activity.completed ? '✓ Completed' : '✗ Not Done'}
                     </span>
                     {activity.completed && (
-                      <span className="text-green-600 font-medium mt-2">
-                        +{activity.points} pts
+                      <span className="text-[var(--success)] font-medium">
+                        +{activity.points} points
                       </span>
                     )}
                   </div>
@@ -139,7 +192,11 @@ export default async function ChildInfo({
               </div>
             ))}
             {recentActivities.length === 0 && (
-              <p className="text-gray-500 text-center py-4">No recent activities</p>
+              <div className="text-center py-12">
+                <div className="text-4xl mb-4">🎯</div>
+                <p className="text-[var(--secondary)] text-lg">No activities completed yet</p>
+                <p className="text-sm text-[var(--secondary)]">Complete some activities to see them here!</p>
+              </div>
             )}
           </div>
         </div>
