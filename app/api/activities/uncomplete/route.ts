@@ -1,7 +1,7 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/auth';
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest, {params}: {params: {childId: string}}) {
   try {
     const body = await request.json();
     const { activityId, childId } = body;

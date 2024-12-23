@@ -23,10 +23,8 @@ export default async function ChildInfo({
     include: {
       activities: {
         where: {
-          OR: [
-            { completed: null },
-            { completedAt: null }
-          ]
+          completed: false,
+          completedAt: null,
         },
         orderBy: {
           when: 'asc',
@@ -40,8 +38,8 @@ export default async function ChildInfo({
     where: {
       childrenId: params.childId,
       NOT: {
-        OR: [
-          { completed: null },
+        AND: [
+          { completed: false },
           { completedAt: null }
         ]
       }
